@@ -1,0 +1,8 @@
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]  # Ignore long-line rule if you prefer
+fix = true
+
+[tool.ruff.lint]
+select = ["ALL"]  # Enable all rules, then ignore selectively
