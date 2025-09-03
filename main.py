@@ -1,80 +1,27 @@
-class book:
-    def __init__(self, title, author) -> None:
-        self.title = title
-        self.author = author
-        self.availible = True
-        
-    def borrow(self) -> None:
-        self.availible = False
-        
-    def returnBook(self) -> None:
-        self.availible = True
-        
-    def __str__(self) -> str:
-        return f'"{self.title}" by {self.author}'
+from logging import Logger
 
-class library:
-    def __init__(self, name) -> None:
-        self.name = name
-        self.contents: dict[str, book] = {}
-        ourLibraries[name] = self
-        
-    def __str__(self) -> str:
-        return f'{self.contents}'
- 
+def main():
+    log = Logger("Demo")
     
-bookCache: dict[str, book] = {
-    "The Great Waltz": book("The Great Waltz", "Exx"),
-    "A Great Day": book("A Great Day", "Anonymous Author")
-}
-ourLibraries: dict[str, library] = {}
+    print("=== Showing all log levels with prefix 'Demo' ===")
+    log("Debug", "This is a Debug message")
+    log("Info", "This is an Info message")
+    log("Warning", "This is a Warning message")
+    log("Error", "This is an Error message")
+    log("Critical", "This is a Critical message")
+    
+    # Change prefix to None, fallback to log type
+    log_no_prefix = Logger(None)
+    print("\n=== Showing fallback prefix (uses log type) ===")
+    log_no_prefix("Info", "Info message uses log type as prefix")
+    
+    # Demonstrate MinimumLevel filtering
+    log_filtered = Logger("Filtered")
+    log_filtered.set_minimum_level("Warning")
+    print("\n=== Demonstrating MinimumLevel filtering ===")
+    log_filtered("Debug", "This Debug message should NOT appear")
+    log_filtered("Info", "This Info message should NOT appear")
+    log_filtered("Warning", "This Warning message should appear")
+    log_filtered("Error", "This Error message should appear")
 
-    
-def borrowBook(title: str, library: str) -> book:
-    if title == "":
-        raise Exception("Title is empty.")
-   
-    if library == "":
-        raise Exception("Specify library name.")
-   
-    requestedBook: book = bookCache.get(title)
-    requestedLib: library = ourLibraries.get(library)
-    
-    if not requestedBook:
-        raise ValueError("Book not found in our database.")
-    
-    if not requestedLib:
-        raise ValueError("Library not found.")
-    
-    requestedBook.borrow()
-    requestedLib.contents[title] = requestedBook
-    
-    return requestedBook
-
-def returnBook(title: str) -> book:
-    if title == "":
-        raise Exception("Title is empty.")
-    
-    for lib in ourLibraries.values():
-        requestedBook: book = None
-        requestedLib: library = None
-        
-        if title in lib.contents:
-            requestedBook = lib.contents[title]
-            requestedLib = lib
-            break
-    
-    if requestedBook and requestedLib:
-        requestedBook.returnBook()
-        del requestedLib.contents[title]
-        
-        return requestedBook
-        
-def searchBook(title: str):
-    for bookTitle, book in bookCache.items():
-        if bookTitle == title:
-            print(book)
-            status = "Available" if book.availible else "Not available"
-            print(f"Availability: {status}")
-            
-            
+main()

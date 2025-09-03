@@ -6,3 +6,5 @@ fix = true
 
 [tool.ruff.lint]
 select = ["ALL"]  # Enable all rules, then ignore selectively
+ignore = ["D107"]
+ignore = ["N8"]
